@@ -11,6 +11,9 @@ return [
     // Where the bearer token is kept: auto | secure | file (see App\Services\Auth\TokenStore).
     'token_store' => env('API_TOKEN_STORE', 'file'),
 
+    // Downloaded report files are deleted from the phone after this many days.
+    'keep_downloads_days' => (int) env('KEEP_DOWNLOADS_DAYS', 7),
+
     // Sent on login so tokens can be told apart on the server.
     'device_name' => env('API_DEVICE_NAME', 'android'),
 ];

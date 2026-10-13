@@ -31,6 +31,24 @@ class SharedFiles
         return $name;
     }
 
+    /**
+     * Delete downloaded files older than the given number of days. Returns how many were removed.
+     */
+    public function prune(int $days = 7): int
+    {
+        $disk = Storage::disk('local');
+        $removed = 0;
+
+        foreach ($disk->files(self::DIR) as $file) {
+            if ($disk->lastModified($file) < now()->subDays($days)->getTimestamp()) {
+                $disk->delete($file);
+                $removed++;
+            }
+        }
+
+        return $removed;
+    }
+
     public function path(string $name): string
     {
         return Storage::disk('local')->path(self::DIR.'/'.basename($name));

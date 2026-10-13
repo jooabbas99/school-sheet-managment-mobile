@@ -134,3 +134,15 @@ it('hides actions the user may not use', function () {
 
     $this->get('/reports/create')->assertForbidden();
 });
+
+it('explains a pruned file and offers regeneration', function () {
+    Http::fake([
+        API.'/reports/5/students*' => Http::response(apiPage([])),
+        API.'/reports/5' => Http::response(['data' => ['is_ready' => false, 'file_pruned' => true] + apiReport(5)]),
+    ]);
+
+    Livewire::test(Show::class, ['report' => 5])
+        ->assertSee('تم حذف ملف هذا الكشف من الخادم')
+        ->assertDontSee('مشاركة الملف')
+        ->assertSee('إعادة إنشاء الملف');
+});

@@ -5,6 +5,7 @@ use App\Services\Auth\TokenStore;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 
 it('sends users without a token to login', function () {
@@ -117,4 +118,15 @@ it('keeps signed-in users away from the login screen', function () {
     signIn();
 
     $this->get('/login')->assertRedirect('/home');
+});
+
+it('removes downloaded files older than a week at startup', function () {
+    Storage::disk('local')->put('downloads/old.xlsx', 'x');
+    touch(Storage::disk('local')->path('downloads/old.xlsx'), now()->subDays(8)->getTimestamp());
+    Storage::disk('local')->put('downloads/new.xlsx', 'x');
+
+    $this->get('/')->assertRedirect('/login');
+
+    Storage::disk('local')->assertMissing('downloads/old.xlsx');
+    Storage::disk('local')->assertExists('downloads/new.xlsx');
 });

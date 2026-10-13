@@ -17,6 +17,8 @@
 
             @if ($record['status']['value'] === 'pending')
                 <x-alert type="warning" class="mt-3">{{ __('reports.pending') }}</x-alert>
+            @elseif ($record['file_pruned'] ?? false)
+                <x-alert type="warning" class="mt-3">{{ __('reports.file_pruned') }}</x-alert>
             @elseif ($record['status']['value'] === 'failed')
                 <x-alert class="mt-3">{{ $record['error'] ?? __('reports.failed') }}</x-alert>
             @endif
