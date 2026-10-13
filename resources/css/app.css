@@ -1,0 +1,26 @@
+@import 'tailwindcss';
+@import '@fontsource/cairo/arabic-400.css';
+@import '@fontsource/cairo/arabic-700.css';
+@import '@fontsource/cairo/latin-400.css';
+@import '@fontsource/cairo/latin-700.css';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: 'Cairo', ui-sans-serif, system-ui, sans-serif;
+
+    --color-primary-50: #eff6fb;
+    --color-primary-600: #2a6496;
+    --color-primary-700: #1f4e78;
+    --color-primary-800: #183d5e;
+}
+
+/* Keep content clear of the status bar and gesture bar on phones. */
+@utility safe-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+}
+
+@utility safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+}
