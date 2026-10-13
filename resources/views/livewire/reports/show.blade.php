@@ -9,7 +9,7 @@
                 <h2 class="font-bold">{{ $record['title'] }}</h2>
                 <x-status-badge :status="$record['status']" />
             </div>
-            <dl class="mt-3 grid grid-cols-3 gap-y-2 text-sm">
+            <dl class="mt-3 grid grid-cols-3 gap-x-2 gap-y-2 text-sm [&>dd]:min-w-0 [&>dd]:break-words">
                 <dt class="text-slate-500">{{ __('reports.template') }}</dt><dd class="col-span-2">{{ $record['template']['name'] ?? __('app.none') }}</dd>
                 <dt class="text-slate-500">{{ __('reports.case_type') }}</dt><dd class="col-span-2">{{ $record['case_type']['name'] ?? __('reports.no_case_type') }}</dd>
                 <dt class="text-slate-500">{{ __('students.title') }}</dt><dd class="col-span-2">{{ $record['students_count'] }}</dd>

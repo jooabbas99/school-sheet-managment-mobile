@@ -16,6 +16,14 @@
     --color-primary-800: #183d5e;
 }
 
+/* An app, not a web page: never scroll sideways, no rubber-band bounce. */
+html,
+body {
+    overflow-x: clip;
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
 /* Keep content clear of the status bar and gesture bar on phones. */
 @utility safe-top {
     padding-top: max(1rem, env(safe-area-inset-top));

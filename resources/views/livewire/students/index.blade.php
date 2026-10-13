@@ -4,10 +4,10 @@
 
     <div class="space-y-2">
         <x-input type="search" wire:model.live.debounce.400ms="search" :placeholder="__('students.search')" aria-label="{{ __('students.search') }}" />
-        <div class="flex gap-2">
+        <div class="grid grid-cols-2 gap-2">
             <x-select wire:model.live="gradeId" :options="$grades" :placeholder="__('students.all_grades')" aria-label="{{ __('students.fields.grade') }}" />
             <x-select wire:model.live="status" :options="['active' => __('enums.student_status.active'), 'inactive' => __('enums.student_status.inactive')]"
-                      :placeholder="__('students.all_statuses')" aria-label="{{ __('students.fields.status') }}" class="w-36 shrink-0" />
+                      :placeholder="__('students.all_statuses')" aria-label="{{ __('students.fields.status') }}" />
         </div>
     </div>
 
@@ -26,15 +26,15 @@
             <li wire:key="student-{{ $student['id'] }}">
                 <a href="{{ route('students.show', $student['id']) }}" wire:navigate class="block rounded-xl bg-white p-4 shadow-sm">
                     <div class="flex items-start justify-between gap-2">
-                        <p class="font-bold">{{ $student['name'] }}</p>
+                        <p class="min-w-0 font-bold">{{ $student['name'] }}</p>
                         @if ($student['status']['value'] !== 'active')
                             <x-status-badge :status="$student['status']" />
                         @endif
                     </div>
                     <p class="mt-1 text-sm text-slate-500">{{ $student['grade']['name'] ?? '' }}</p>
-                    <p class="mt-1 flex justify-between text-sm text-slate-500">
-                        <span>{{ $student['guardian']['name'] ?? '' }}</span>
-                        <span dir="ltr">{{ $student['guardian']['phone'] ?? '' }}</span>
+                    <p class="mt-1 flex justify-between gap-2 text-sm text-slate-500">
+                        <span class="min-w-0 truncate">{{ $student['guardian']['name'] ?? '' }}</span>
+                        <span dir="ltr" class="shrink-0">{{ $student['guardian']['phone'] ?? '' }}</span>
                     </p>
                 </a>
             </li>

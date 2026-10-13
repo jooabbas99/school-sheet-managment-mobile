@@ -6,7 +6,7 @@
     @if ($record)
         <x-card>
             <h2 class="mb-3 font-bold text-primary-700">{{ __('students.section_student') }}</h2>
-            <dl class="grid grid-cols-3 gap-y-2 text-sm">
+            <dl class="grid grid-cols-3 gap-x-2 gap-y-2 text-sm [&>dd]:min-w-0 [&>dd]:break-words">
                 <dt class="text-slate-500">{{ __('students.fields.national_id') }}</dt><dd class="col-span-2 font-medium" dir="ltr" style="text-align: right">{{ $record['national_id'] }}</dd>
                 <dt class="text-slate-500">{{ __('students.fields.grade') }}</dt><dd class="col-span-2">{{ $record['grade']['name'] ?? __('app.none') }}</dd>
                 <dt class="text-slate-500">{{ __('students.fields.institute') }}</dt><dd class="col-span-2">{{ $record['institute']['name'] ?? __('app.none') }}</dd>
@@ -22,7 +22,7 @@
 
         <x-card>
             <h2 class="mb-3 font-bold text-primary-700">{{ __('students.section_guardian') }}</h2>
-            <dl class="grid grid-cols-3 gap-y-2 text-sm">
+            <dl class="grid grid-cols-3 gap-x-2 gap-y-2 text-sm [&>dd]:min-w-0 [&>dd]:break-words">
                 <dt class="text-slate-500">{{ __('students.fields.guardian_name') }}</dt><dd class="col-span-2 font-medium">{{ $record['guardian']['name'] }}</dd>
                 <dt class="text-slate-500">{{ __('students.fields.guardian_phone') }}</dt>
                 <dd class="col-span-2"><a href="tel:{{ $record['guardian']['phone'] }}" class="font-medium text-primary-700" dir="ltr">{{ $record['guardian']['phone'] }}</a></dd>

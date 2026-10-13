@@ -36,14 +36,14 @@
     @elseif ($step === 3)
         <div class="space-y-2">
             <x-input type="search" wire:model.live.debounce.400ms="search" :placeholder="__('students.search')" aria-label="{{ __('students.search') }}" />
-            <div class="flex gap-2">
+            <div class="grid grid-cols-2 gap-2">
                 <x-select wire:model.live="gradeId" :options="$grades" :placeholder="__('students.all_grades')" aria-label="{{ __('students.fields.grade') }}" />
                 <x-select wire:model.live="status" :options="['active' => __('enums.student_status.active'), 'inactive' => __('enums.student_status.inactive')]"
-                          :placeholder="__('students.all_statuses')" class="w-36 shrink-0" aria-label="{{ __('students.fields.status') }}" />
+                          :placeholder="__('students.all_statuses')" aria-label="{{ __('students.fields.status') }}" />
             </div>
         </div>
 
-        <div class="sticky top-16 z-10 flex items-center justify-between rounded-lg bg-primary-50 px-3 py-2 text-sm">
+        <div class="sticky top-16 z-10 flex flex-wrap items-center justify-between gap-2 rounded-lg bg-primary-50 px-3 py-2 text-sm">
             <span class="font-bold text-primary-700">{{ __('reports.wizard.selected', ['count' => count($selected)]) }}</span>
             <div class="flex gap-3">
                 <button type="button" wire:click="selectAllFiltered" class="font-bold text-primary-700">{{ __('reports.wizard.select_all', ['count' => $total]) }}</button>
@@ -75,7 +75,7 @@
         @endif
     @else
         <x-card class="space-y-3">
-            <dl class="grid grid-cols-3 gap-y-2 text-sm">
+            <dl class="grid grid-cols-3 gap-x-2 gap-y-2 text-sm [&>dd]:min-w-0 [&>dd]:break-words">
                 <dt class="text-slate-500">{{ __('reports.template') }}</dt><dd class="col-span-2">{{ $template['name'] ?? '' }}</dd>
                 <dt class="text-slate-500">{{ __('reports.case_type') }}</dt><dd class="col-span-2">{{ $caseTypes[(int) $caseTypeId] ?? __('reports.no_case_type') }}</dd>
                 <dt class="text-slate-500">{{ __('students.title') }}</dt><dd class="col-span-2">{{ count($selected) }}</dd>
