@@ -21,6 +21,7 @@ class Navigation
         'dashboard' => ['app.nav.dashboard', 'chart', 'students.view'],
         'users.index' => ['app.nav.users', 'user-group', 'users.manage'],
         'lookups.index' => ['app.nav.lookups', 'list', 'lookups.manage'],
+        'institute.logo' => ['app.nav.logo', 'photo', 'templates.manage'],
         'activity.index' => ['app.nav.activity', 'clock', 'activity.view'],
     ];
 
