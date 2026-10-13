@@ -61,17 +61,60 @@ class ApiClient
     }
 
     /**
+     * Multipart upload (e.g. an Excel file).
+     *
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    public function upload(string $uri, string $field, string $path, string $fileName, array $data = []): array
+    {
+        return $this->send(fn (PendingRequest $http) => $http
+            ->attach($field, (string) file_get_contents($path), $fileName)
+            ->post($uri, array_filter($data, fn ($value) => $value !== null)), json: false);
+    }
+
+    /**
+     * Download a file from the API (with the token) and return its bytes.
+     *
+     * @param  array<string, mixed>  $query
+     */
+    public function download(string $uri, array $query = []): string
+    {
+        return $this->sendRaw(fn (PendingRequest $http) => $http->accept('*/*')->get($uri, $query))->body();
+    }
+
+    /**
+     * Download a signed link returned by the API (absolute URL, no token needed).
+     */
+    public function downloadSigned(string $url): string
+    {
+        return $this->sendRaw(fn () => Http::timeout(config('api.timeout'))
+            ->connectTimeout(config('api.connect_timeout'))
+            ->get($url))->body();
+    }
+
+    /**
      * @param  callable(PendingRequest): Response  $call
      * @return array<string, mixed>
      */
-    private function send(callable $call): array
+    private function send(callable $call, bool $json = true): array
+    {
+        $json = $this->sendRaw($call, $json)->json();
+
+        return is_array($json) ? $json : [];
+    }
+
+    /**
+     * @param  callable(PendingRequest): Response  $call
+     */
+    private function sendRaw(callable $call, bool $json = true): Response
     {
         if ($this->connectivity->isOffline()) {
             throw new OfflineException;
         }
 
         try {
-            $response = $call($this->request());
+            $response = $call($this->request($json));
         } catch (ConnectionException) {
             throw new OfflineException;
         }
@@ -93,16 +136,17 @@ class ApiClient
             throw ApiException::fromResponse($response);
         }
 
-        $json = $response->json();
-
-        return is_array($json) ? $json : [];
+        return $response;
     }
 
-    private function request(): PendingRequest
+    /**
+     * @param  bool  $json  false for multipart uploads (a JSON Content-Type header would override multipart)
+     */
+    private function request(bool $json = true): PendingRequest
     {
         $request = Http::baseUrl(config('api.base_url'))
             ->acceptJson()
-            ->asJson()
+            ->when($json, fn (PendingRequest $r) => $r->asJson())
             ->timeout(config('api.timeout'))
             ->connectTimeout(config('api.connect_timeout'));
 

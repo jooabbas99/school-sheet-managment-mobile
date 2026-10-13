@@ -12,6 +12,13 @@ return [
     'your_institute' => 'المعهد: :name',
     'all_institutes' => 'كل المعاهد',
     'role' => 'الصلاحية: :role',
+    'edit' => 'تعديل',
+    'delete' => 'حذف',
+    'confirm' => 'تأكيد',
+    'yes' => 'نعم',
+    'no' => 'لا',
+    'none' => '—',
+    'download' => 'تحميل',
     'nav' => [
         'home' => 'الرئيسية',
         'students' => 'الطلاب',

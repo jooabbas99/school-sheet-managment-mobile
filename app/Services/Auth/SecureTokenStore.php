@@ -2,6 +2,7 @@
 
 namespace App\Services\Auth;
 
+use App\Support\Runtime;
 use Native\Mobile\SecureStorage;
 
 /**
@@ -15,7 +16,7 @@ class SecureTokenStore implements TokenStore
 
     public static function available(): bool
     {
-        return function_exists('nativephp_call');
+        return Runtime::onDevice();
     }
 
     public function get(): ?string

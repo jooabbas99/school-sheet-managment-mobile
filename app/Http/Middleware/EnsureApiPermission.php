@@ -15,9 +15,12 @@ class EnsureApiPermission
 {
     public function __construct(private readonly CurrentUser $currentUser) {}
 
-    public function handle(Request $request, Closure $next): Response
+    /**
+     * @param  string|null  $permission  explicit permission (route middleware parameter), else the section's
+     */
+    public function handle(Request $request, Closure $next, ?string $permission = null): Response
     {
-        $permission = Navigation::permissionFor((string) $request->route()?->getName());
+        $permission ??= Navigation::permissionFor((string) $request->route()?->getName());
 
         abort_if($permission !== null && ! $this->currentUser->can($permission), 403, __('errors.forbidden'));
 

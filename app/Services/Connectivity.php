@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
+use App\Support\Runtime;
 use Native\Mobile\Network;
 
 /**
- * Asks the device whether it is online. Outside the native app (browser, tests) the status is unknown,
+ * Asks the phone whether it is online. Without a native bridge (browser, tests) the status is unknown,
  * so we assume online and rely on connection errors instead.
  */
 class Connectivity
@@ -14,6 +15,10 @@ class Connectivity
 
     public function isOffline(): bool
     {
+        if (! Runtime::hasBridge()) {
+            return false;
+        }
+
         $status = $this->network->status();
 
         return $status !== null && isset($status->connected) && $status->connected === false;

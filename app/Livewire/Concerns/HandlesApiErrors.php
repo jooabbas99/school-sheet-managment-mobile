@@ -20,12 +20,15 @@ trait HandlesApiErrors
      * @template T
      *
      * @param  callable(): T  $call
+     * @param  bool  $resetErrors  false for secondary calls (e.g. lookups in render) so they don't hide an earlier error
      * @return T|null
      */
-    protected function callApi(callable $call): mixed
+    protected function callApi(callable $call, bool $resetErrors = true): mixed
     {
-        $this->errorMessage = null;
-        $this->offline = false;
+        if ($resetErrors) {
+            $this->errorMessage = null;
+            $this->offline = false;
+        }
 
         try {
             return $call();

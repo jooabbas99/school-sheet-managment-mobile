@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Http;
+
 it('builds the bottom bar from permissions', function (array $permissions, array $visible, array $hidden) {
     signIn($permissions);
 
@@ -30,6 +32,10 @@ it('lists admin sections on the more screen only with permission', function () {
 
 it('blocks sections the user may not open', function () {
     signIn(['students.view']);
+    Http::fake([
+        API.'/students*' => Http::response(['data' => [], 'meta' => ['current_page' => 1, 'last_page' => 1, 'total' => 0]]),
+        API.'/lookups' => Http::response(['data' => ['institutes' => [], 'grades' => [], 'case_types' => []]]),
+    ]);
 
     $this->get('/students')->assertOk();
     $this->get('/users')->assertForbidden();

@@ -1,7 +1,10 @@
 @php($tabs = app(\App\Support\Navigation::class)->tabs())
 <x-layouts::base :title="$title ?? null">
-    <header class="sticky top-0 z-10 bg-primary-700 px-4 pb-3 pt-4 text-white shadow safe-top">
-        <h1 class="text-lg font-bold">{{ $title ?? __('app.name') }}</h1>
+    <header class="sticky top-0 z-10 flex items-center gap-3 bg-primary-700 px-4 pb-3 pt-4 text-white shadow safe-top">
+        @isset($back)
+            <a href="{{ $back }}" wire:navigate aria-label="{{ __('app.back') }}" class="-ms-1 p-1 text-2xl leading-none">&rarr;</a>
+        @endisset
+        <h1 class="truncate text-lg font-bold">{{ $title ?? __('app.name') }}</h1>
     </header>
 
     <main class="px-4 pb-28 pt-4">
