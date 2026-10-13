@@ -9,7 +9,7 @@ return [
     'connect_timeout' => (int) env('API_CONNECT_TIMEOUT', 8),
 
     // Where the bearer token is kept: auto | secure | file (see App\Services\Auth\TokenStore).
-    'token_store' => env('API_TOKEN_STORE', 'auto'),
+    'token_store' => env('API_TOKEN_STORE', 'file'),
 
     // Sent on login so tokens can be told apart on the server.
     'device_name' => env('API_DEVICE_NAME', 'android'),
