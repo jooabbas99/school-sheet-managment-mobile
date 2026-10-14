@@ -3,13 +3,14 @@
 namespace App\Services\Api;
 
 /**
- * Institutes, grades and case types. Cached in the session for a few minutes: they rarely change.
+ * Institutes, grades and case types. Cached in the session for a short time (they rarely change, and many
+ * screens need them); cleared at app start, by the refresh buttons and after any lookup change in the app.
  */
 class LookupsApi
 {
     private const KEY = 'api_lookups';
 
-    private const TTL_SECONDS = 600;
+    private const TTL_SECONDS = 120;
 
     public function __construct(private readonly ApiClient $api) {}
 

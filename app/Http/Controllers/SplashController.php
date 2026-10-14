@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\UnauthenticatedException;
 use App\Services\Api\AuthApi;
+use App\Services\Api\LookupsApi;
 use App\Services\Auth\TokenStore;
 use App\Services\Files\SharedFiles;
 use Illuminate\Http\RedirectResponse;
@@ -14,8 +15,11 @@ use Illuminate\Http\RedirectResponse;
  */
 class SplashController extends Controller
 {
-    public function __invoke(TokenStore $tokens, AuthApi $auth, SharedFiles $files): RedirectResponse
+    public function __invoke(TokenStore $tokens, AuthApi $auth, SharedFiles $files, LookupsApi $lookups): RedirectResponse
     {
+        // Fresh institutes / grades / case types on every app start.
+        $lookups->forget();
+
         // Housekeeping on every start: shared report files don't need to stay on the phone.
         $files->prune(config('api.keep_downloads_days'));
 

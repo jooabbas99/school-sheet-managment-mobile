@@ -27,3 +27,6 @@ Homestead.yaml
 Thumbs.db
 
 /nativephp
+
+# Credential files (keystores, private keys, etc.)
+/credentials/

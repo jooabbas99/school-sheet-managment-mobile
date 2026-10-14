@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Auth\Login;
+use App\Services\Api\LookupsApi;
 use App\Services\Auth\TokenStore;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Request;
@@ -129,4 +130,28 @@ it('removes downloaded files older than a week at startup', function () {
 
     Storage::disk('local')->assertMissing('downloads/old.xlsx');
     Storage::disk('local')->assertExists('downloads/new.xlsx');
+});
+
+it('reloads lookups on every app start', function () {
+    app(TokenStore::class)->put('t');
+    session()->put('api_lookups', ['at' => now()->timestamp, 'data' => ['institutes' => [], 'grades' => [], 'case_types' => []]]);
+    Http::fake([API.'/me' => Http::response(['data' => apiUser(['students.view'])])]);
+
+    $this->get('/')->assertRedirect('/home');
+
+    expect(session('api_lookups'))->toBeNull();
+});
+
+it('keeps lookups for two minutes only', function () {
+    signIn();
+    Http::fake([API.'/lookups' => Http::sequence()
+        ->push(['data' => ['institutes' => [['id' => 1, 'name' => 'قديم', 'has_logo' => false]], 'grades' => [], 'case_types' => []]])
+        ->push(['data' => ['institutes' => [['id' => 1, 'name' => 'جديد', 'has_logo' => false]], 'grades' => [], 'case_types' => []]])]);
+    $lookups = app(LookupsApi::class);
+
+    expect($lookups->instituteOptions())->toBe([1 => 'قديم']);
+    $this->travel(60)->seconds();
+    expect($lookups->instituteOptions())->toBe([1 => 'قديم']);
+    $this->travel(61)->seconds();
+    expect($lookups->instituteOptions())->toBe([1 => 'جديد']);
 });
